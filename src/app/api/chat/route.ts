@@ -90,7 +90,8 @@ export async function POST (req: NextRequest) {
                 //TODO: this should be dynamic.
                 content:`you are a helpful assistant that answers question based only on following context.\n 
                 You will answer "Im sorry, I don't know the answer for that question" if the question is out of context.
-                
+                Do not try to create your own answer.
+
                 Context: {context}`},
                 {role:"user",
                 content:"{query}"}

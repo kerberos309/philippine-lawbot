@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Input, Button } from "@nextui-org/react";
+import { FaPaperPlane } from 'react-icons/fa';
+import {CgSearchLoading} from 'react-icons/cg';
 
 type Message = {
   text: string;
@@ -7,6 +9,7 @@ type Message = {
 };
 
 const ChatInterface: React.FC = () => {
+  const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -19,7 +22,10 @@ const ChatInterface: React.FC = () => {
 
   const sendMessage = async () => {
     if (inputText.trim()) {
+      setInputText('');
       setMessages([...messages, { text: inputText, sender: 'user' }]);
+      setMessages(botMessages => [...botMessages, {text: 'Atty. Phil Lawbot: Loading...', sender: 'bot'}]);
+      setLoading(true);
       const botResponse = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -29,8 +35,9 @@ const ChatInterface: React.FC = () => {
       });
       const data = await botResponse.json();
       if(data.status===200){
-        setInputText('');
-        setMessages(prevMessages => [...prevMessages, { text: `Atty. Phil Lawbot: ${data.data}`, sender: 'bot' }]);
+        setMessages(prevMessage=>prevMessage.slice(0,-1));
+        setLoading(false);
+        setMessages(botMessages => [...botMessages, { text: `Atty. Phil Lawbot: ${data.data}`, sender: 'bot' }]);
       }
     }
   };
@@ -48,7 +55,11 @@ const ChatInterface: React.FC = () => {
             {messages.map((message, index) => (
                 <div key={index} className='flex w-full'>
                     <div style={message.sender==='user'?{marginLeft:'auto'}:{marginRight:'auto'}} className={`max-w-[70%] p-2 rounded-lg`}>
-                        <p>{message.text}</p>
+                        {message.sender==='bot' ? 
+                          loading ?
+                            <CgSearchLoading/> :
+                            <p>{message.text}</p> :
+                          <p>{message.text}</p>}
                     </div>
                 </div>
             ))}
@@ -64,7 +75,14 @@ const ChatInterface: React.FC = () => {
             }}
             >
             </Input>
-            <Button style={{width:'50px'}} onClick={sendMessage}>Send</Button>
+            <Button style={{
+              width: '50px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }} onClick={sendMessage}>
+              <FaPaperPlane />
+            </Button>
         </div>
         
     </div>
