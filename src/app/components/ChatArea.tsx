@@ -55,9 +55,26 @@ const ChatInterface: React.FC = () => {
             {messages.map((message, index) => (
                 <div key={index} className='flex w-full'>
                     <div style={message.sender==='user'?{marginLeft:'auto'}:{marginRight:'auto'}} className={`max-w-[70%] p-2 rounded-lg`}>
-                        {message.sender==='bot' ? 
-                          loading ?
-                            <CgSearchLoading/> :
+                        {message.sender==='bot' && index===messages.length - 1 ? 
+                          loading ? (
+                            <div className="flex items-center justify-center">
+                              <svg className="animate-spin h-8 w-8 text-blue-500"
+                                    xmlns='http://www.w3.org/2000/svg'
+                                    fill='none'
+                                    viewBox='0 0 24 24'>
+                                      <circle className="opacity-25"
+                                        cx="12"
+                                        cy="12"
+                                        r="10"
+                                        stroke="currentColor"
+                                        stroke-width="4"></circle>
+                                        <path
+                                          className="opacity-75"
+                                          fill="currentColor"
+                                          d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                        ></path>
+                                    </svg>
+                            </div>) :
                             <p>{message.text}</p> :
                           <p>{message.text}</p>}
                     </div>
