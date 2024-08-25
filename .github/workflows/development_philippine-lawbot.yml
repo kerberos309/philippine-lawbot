@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v4
@@ -26,15 +26,12 @@ jobs:
           npm install
           npm run build --if-present
           npm run test --if-present
-
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
-
+      
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: node-app
-          path: release.zip
+          path: .
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,29 +43,21 @@ jobs:
       id-token: write #This is required for requesting the JWT
 
     steps:
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.x'
-          
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: node-app
-          
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_610F8897E77C491AB3B49CFA84999F1B }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3A783E0E2DD748918078B4A3830F1E41 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_DB362AEB88E844419B8E3D2E9A71F493 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3AD69B890C914E78844B92F631F18CA5 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_302CA79AB47A4289A9941284FF3CB5D4 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_7535F9D757254B7099D8BAA225B02863 }}
 
       - name: 'Deploy to Azure Web App'
-        id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
         with:
           app-name: 'philippine-lawbot'
           slot-name: 'Production'
