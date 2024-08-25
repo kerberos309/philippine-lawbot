@@ -68,5 +68,3 @@ jobs:
           app-name: 'ph-lawbot'
           slot-name: 'Production'
           package: .
-          
-      - name: 
