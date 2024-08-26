@@ -77,6 +77,10 @@ jobs:
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1E26936A409042289834C85C6478C69F }}
       - name: where am i?
         run: pwd
+      - name: Set up Node.js version
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
       - name: install dependencies
         run: npm ci
       - name: 'Deploy to Azure Web App'
