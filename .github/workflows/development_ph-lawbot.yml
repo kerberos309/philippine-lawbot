@@ -28,7 +28,15 @@ jobs:
         env:
           NODE_ENV: production
         run: npm run build
-
+      - name: check if node_modules exists
+        run: pwd
+      - name: check node_modules/.bin/next exists
+        run: |
+          cd node_modules
+          pwd
+          cd .bin
+          pwd
+          ls
       - name: Prepare artifact for deployment
         run: |
           mkdir -p release
@@ -67,7 +75,10 @@ jobs:
           client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_BDFC8ECDBAA94226BA999B6BFCE675C0 }}
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_F58974BB3E504F51A087DD7EB2923D95 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1E26936A409042289834C85C6478C69F }}
-
+      - name: where am i?
+        run: pwd
+      - name: install dependencies
+        run: npm ci
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
