@@ -83,6 +83,13 @@ jobs:
           node-version: '20.x'
       - name: install dependencies
         run: npm ci
+      - name: check node_modules/.bin/next exists
+        run: |
+          cd node_modules
+          pwd
+          cd .bin
+          pwd
+          ls
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
