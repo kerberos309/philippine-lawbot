@@ -21,25 +21,30 @@ const ChatInterface: React.FC = () => {
   useEffect(scrollToBottom, [messages]);
 
   const sendMessage = async () => {
-    if (inputText.trim()) {
-      setInputText('');
-      setMessages([...messages, { text: inputText, sender: 'user' }]);
-      setMessages(botMessages => [...botMessages, {text: 'Atty. Phil Lawbot: Loading...', sender: 'bot'}]);
-      setLoading(true);
-      const botResponse = await fetch('/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ question: inputText }),
-      });
-      const data = await botResponse.json();
-      if(data.status===200){
-        setMessages(prevMessage=>prevMessage.slice(0,-1));
-        setLoading(false);
-        setMessages(botMessages => [...botMessages, { text: `Atty. Phil Lawbot: ${data.data}`, sender: 'bot' }]);
+    try {
+      if (inputText.trim()) {
+        setInputText('');
+        setMessages([...messages, { text: inputText, sender: 'user' }]);
+        setMessages(botMessages => [...botMessages, {text: 'Atty. Phil Lawbot: Loading...', sender: 'bot'}]);
+        setLoading(true);
+        const botResponse = await fetch('/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ question: inputText }),
+        });
+        const data = await botResponse.json();
+        if(data.status===200){
+          setMessages(prevMessage=>prevMessage.slice(0,-1));
+          setLoading(false);
+          setMessages(botMessages => [...botMessages, { text: `Atty. Phil Lawbot: ${data.data}`, sender: 'bot' }]);
+        }
       }
+    } catch (error) {
+      console.log(error);
     }
+    
   };
 
   return (
