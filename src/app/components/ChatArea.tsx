@@ -39,6 +39,8 @@ const ChatInterface: React.FC = () => {
           setMessages(prevMessage=>prevMessage.slice(0,-1));
           setLoading(false);
           setMessages(botMessages => [...botMessages, { text: `Atty. Phil Lawbot: ${data.data}`, sender: 'bot' }]);
+        }else{
+          console.log(data.data);
         }
       }
     } catch (error) {
