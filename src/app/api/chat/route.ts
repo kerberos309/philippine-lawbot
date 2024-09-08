@@ -7,7 +7,9 @@ import {RetrievalQAChain} from "langchain/chains"
 import { NextRequest, NextResponse } from 'next/server';
 
 const pineconeApiKey = process.env.PINECONE_API_KEY as string;
-console.log(pineconeApiKey);
+if(pineconeApiKey === undefined){
+    throw "UNABLE TO RETRIEVE PINECONE API KEY!";
+}
 
 
 export async function POST (req: NextRequest) {
