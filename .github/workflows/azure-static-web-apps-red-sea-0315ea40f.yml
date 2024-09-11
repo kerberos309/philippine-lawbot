@@ -20,6 +20,11 @@ jobs:
           submodules: true
           lfs: false
       - name: Build And Deploy
+        env:
+            PINECONE_API_KEY: ${{ secrets.PINECONE_API_KEY }}
+            PINECONE_INDEX: ${{ secrets.PINECONE_INDEX }}
+            OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+            PINECONE_NAMESPACE: ${{ secrets.PINECONE_NAMESPACE }}
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
