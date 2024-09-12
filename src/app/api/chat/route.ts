@@ -104,8 +104,9 @@ export async function POST (req: NextRequest) {
             const response = await chain.invoke({"context":decompositionCombinedDocs,"query":question});
             console.log(response.text);
             return NextResponse.json({status:200, data:response.text});
-    } catch (error) {
-        console.log(error);
-        return NextResponse.json({status:500, data:error});
+    } catch (error: unknown) {
+        if(error instanceof Error){
+            return NextResponse.json({status:500, data:error.message});
+        }
     }
 }

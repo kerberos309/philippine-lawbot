@@ -34,6 +34,11 @@ const ChatInterface: React.FC = () => {
           },
           body: JSON.stringify({ question: inputText }),
         });
+        console.log(JSON.stringify(botResponse));
+        if(!botResponse.ok){
+          const errorData = await botResponse.json();
+          throw new Error(errorData.data)
+        }
         const data = await botResponse.json();
         if(data.status===200){
           setMessages(prevMessage=>prevMessage.slice(0,-1));
@@ -43,8 +48,9 @@ const ChatInterface: React.FC = () => {
           console.log(data.data);
         }
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      console.log("Error thrown from server side.");
+      console.error(error.message);
     }
     
   };
